@@ -1,0 +1,400 @@
+<template>
+  <div>
+    <!-- 此处放置图片，点击图片设置click事件获得动画效果 -->
+    <div class="img-div-style">
+      <img class="img-style" src="../assets/images/1.png">
+    </div>
+    <!-- 此处设置动画，用来控制音量滑块的大小 -->
+
+
+    <!-- 此处设置自定义按钮，分别有三个按钮，分别是上一首，暂停，下一首 -->
+    <div class="three-btn-parent-style">
+      <!-- 此处为上一首 -->
+      <div class="prev-btn-style">
+        <button v-on:click="change_prev_song">上一首</button>
+      </div>
+      <!-- 此处为暂停/开始：这里的事件设置较为复杂 -->
+      <div class="start-pause-btn-style">
+        <button v-on:click="change_stated_pause">开始</button>
+      </div>
+      <!-- 此处为下一首 -->
+      <div class="next-btn-style">
+        <button v-on:click="change_next_song">下一首</button>
+      </div>
+    </div>
+
+
+    <!-- 此处设置audio标签可以设置为隐藏，我们只从audio标签中获取数据 -->
+    <div class="audio-div-style">
+      <!-- 此处设置了audio标签，因为后期设置的原因，样式表中修改为没有样式 -->
+      <audio class="audio-style" id="myaudio" autoplay="autoplay">
+        <source id="mysource" v-bind:src="audioitem.src" v-for="(audioitem, index) in this.songlist"/>
+        你的浏览器GG了，就是不支持audio标签
+      </audio>
+      <div>
+        <!-- 这里需要传递一个数值 -->
+        <span class="songer-style">歌唱者:{{ this.now_song_songer }}</span>
+        <span class="">歌曲名称：{{ this.now_song_songname }}</span>
+        <span class="title-time-style">{{ this.now_song_currenttime }} / {{ this.now_song_totaltime }}</span>
+      </div>
+      <!-- 此处设置了一个自定义的滑动滚动条 -->
+      <!--
+      <progress class="progress-style" v-bind:value="this.myaudio.currentTime"
+                v-bind:max="this.myaudio.duration"></progress>
+      -->
+      <input type="range" id="myrange" v-bind:min="0" v-bind:max="this.myaudio.duration"
+             v-bind:value="this.myaudio.currentTime"
+             class="slider_range" v-on:change="change_range_position">
+    </div>
+
+    <!-- 此处设置了“喜欢”按钮，我们可以设计为一个button：点击之后有不同的事件处理 -->
+    <div class="three-btn-parent-right-style">
+      <span class="love-btn-style">
+        <button>喜欢</button>
+      </span>
+      <span class="loop-btn-style">
+        <button v-on:click="change_song_play_style">{{ this.now_song_play_style_name }}</button>
+      </span>
+      <span class="voice-btn-style">
+        <transition name="control-voice">
+          <div v-if="this.show_control_voice === true" style="position: fixed;left: 88%; top: 86%;">
+            <input type="range" min="0" max="10" step="1" v-on:change="change_song_voice"
+                   v-bind:value="parseInt(this.myaudio.volume * 10)" id="myvoice">
+          </div>
+        </transition>
+        <button v-on:click="show_song_voice" v-on:keyup.down="slow_down_voice" v-on:keyup.up="add_to_voice">声音</button>
+      </span>
+    </div>
+
+
+  </div>
+</template>
+
+<script>
+  /* 此时组件的data部分需要从右侧菜单传递过来参数，现在我们可以用虚假的数据进行模拟 */
+
+  /*  此处有问题,这个问题就是我们需要左侧导航栏和底部音乐播放器进行组件之间的互动，组件之间是同级关系，是否采用VueX，需要慎重考虑 */
+  export default{
+    props: {},
+    data: function () {
+      return {
+        songlist: [],
+        now_song_position: -1,
+        now_song_totaltime: '00:00:00',
+        now_song_currenttime: '00:00:00',
+        now_song_songname: '初始化歌曲',
+        now_song_songer: '初始化歌手',
+        now_song_play_style: 1,
+        now_song_play_style_name: '顺序播放',
+        show_control_voice: false,
+        myaudio: ''
+      }
+    },
+    computed: {},
+    methods: {
+      change_stated_pause: function () {
+        if (this.now_song_position === -1) {
+          console.log('初始化my_music组件的时候没有歌曲，nowsongposition = -1')
+        } else {
+          if (this.myaudio.paused) {
+            this.myaudio.play()
+          } else {
+            this.myaudio.pause()
+          }
+        }
+      },
+      change_next_song: function () {
+        if (this.songlist.length === -1) {
+          console.log('my_music 组件 songlist为空')
+        } else {
+          if (this.now_song_position === this.songlist.length - 1) {
+            this.now_song_position = 0
+          } else {
+            this.now_song_position++
+          }
+          this.myaudio.src = this.songlist[this.now_song_position].src
+          this.myaudio.play()
+        }
+      },
+      change_prev_song: function () {
+        if (this.songlist.length === -1) {
+          console.log('my_music 组件 songlist为空')
+        } else {
+          if (this.now_song_position === 0) {
+            this.now_song_position = this.songlist.length - 1
+          } else {
+            this.now_song_position--
+          }
+          this.myaudio.src = this.songlist[this.now_song_position].src
+          this.myaudio.play()
+        }
+      },
+      transformTime: function (seconds) {
+        let m, s
+        m = Math.floor(seconds / 60)
+        m = m.toString().length === 1 ? ('0' + m) : m
+        s = Math.floor(seconds - 60 * m)
+        s = s.toString().length === 1 ? ('0' + s) : s
+        return m + ':' + s
+      },
+      get_songlist_songname: function () {
+        console.log('获取歌曲的名称')
+        if (this.songlist[this.now_song_position].songname === '' || this.songlist[this.now_song_position].songname === undefined) {
+          this.now_song_songname = '未知歌曲'
+        } else {
+          this.now_song_songname = this.songlist[this.now_song_position].songname
+        }
+        console.log('获取歌曲的名称，获取完毕')
+      },
+      get_songlist_songer: function () {
+        console.log('获取歌手的名称')
+        if (this.songlist[this.now_song_position].songer === '' || this.songlist[this.now_song_position].songer === undefined) {
+          this.now_song_songer = '未知歌手'
+        } else {
+          this.now_song_songer = this.songlist[this.now_song_position].songer
+        }
+        console.log('获取歌手的名称，获取完毕')
+      },
+      change_range_position: function () {
+        this.myaudio.currentTime = document.getElementById('myrange').value
+      },
+      change_song_play_style: function () {
+        console.log('切换音乐风格')
+        if (this.now_song_play_style === 3) {
+          this.now_song_play_style = 1
+          this.now_song_play_style_name = '顺序播放'
+        } else {
+          this.now_song_play_style++
+          if (this.now_song_play_style === 2) {
+            this.now_song_play_style_name = '随机播放'
+          } else {
+            this.now_song_play_style_name = '单曲播放'
+          }
+        }
+      },
+      show_song_voice: function () {
+        this.show_control_voice === true ? this.show_control_voice = false : this.show_control_voice = true
+        console.log('切换了show_control_voice' + this.show_control_voice)
+      },
+      change_song_voice: function () {
+        this.myaudio.volume = (parseInt(document.getElementById('myvoice').value)) / 10
+        console.log('确认的播放音量 = ' + this.myaudio.volume)
+      },
+      slow_down_voice: function () {
+        if (this.myaudio.volume > 0) {
+          this.myaudio.volume = (this.myaudio.volume * 10 - 1) / 10
+        } else {
+          this.myaudio.volume = 0
+          console.log('进行了键盘事件的监听----------减少音量' + this.myaudio.volume)
+        }
+      },
+      add_to_voice: function () {
+        if (this.myaudio.volume < 1) {
+          this.myaudio.volume = (this.myaudio.volume * 10 + 1) / 10
+        } else {
+          this.myaudio.volume = 1
+          console.log('进行了键盘事件的监听----------增加音量' + this.myaudio.volume)
+        }
+      }
+    },
+    created: function () {
+      this.songlist = this.$store.state.songlist
+      this.now_song_position = -1
+      if (this.songlist.length >= 0) {
+        this.now_song_position = 0
+      }
+    },
+    mounted: function () {
+      console.log('mounted绑定事件出现了问题，无法进行相对事件的绑定')
+      console.log('查找了 DOM 树结构')
+      this.myaudio = document.getElementById('myaudio')
+      this.myaudio.volume = 0.5
+      this.myaudio.addEventListener('play', () => {
+        this.get_songlist_songname()
+        this.get_songlist_songer()
+        this.now_song_totaltime = this.transformTime(this.myaudio.duration)
+        this.now_song_currenttime = this.transformTime(this.myaudio.currentTime)
+        setInterval(() => {
+          this.now_song_totaltime = this.transformTime(this.myaudio.duration)
+          this.now_song_currenttime = this.transformTime(this.myaudio.currentTime)
+          /* 当歌曲播放完毕之后 */
+          if (this.myaudio.ended === true) {
+            if (this.now_song_play_style === 1) {
+              this.now_song_position = this.now_song_position
+            } else if (this.now_song_play_style === 2) {
+              this.now_song_position = parseInt(Math.floor(Math.random() * this.songlist.length)) - 1
+            } else {
+              this.now_song_position = this.now_song_position - 1
+            }
+            this.change_next_song()
+            this.myaudio.play()
+          }
+        }, 100)
+      })
+    }
+  }
+</script>
+
+<style>
+  /* 此处设置点击动画 */
+  .control-voice-enter {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+
+  .control-voice-leave {
+    transform: translateY(-50px);
+    opacity: 1;
+  }
+
+  .control-voice-leave-active {
+    transition: 1.2s ease;
+    animation: bounce-out;
+    opacity: 0;
+  }
+
+  @keyframes bounce-out {
+    from {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 0.3;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .control-voice-enter-active {
+    transition: 1.2s ease;
+    animation: bounce-in;
+  }
+
+  @keyframes bounce-in {
+    from {
+      opacity: 0;
+    }
+    25% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /*开始设置音乐播放器组件的特殊样式，自己也算是学习一些真正的css
+      过程步骤：
+      1.去除原来的样式
+      2.给滑动轨道(track)添加样式
+ */
+  .slider_range { /*设置滑块下面那条线的样式*/
+    outline: none; /*去掉点击时出现的外边框*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /*这三个是去掉那条线原有的默认样式，划重点！！*/
+    width: 100%;
+    height: 10%;
+    background: orange;
+    margin-top: 30px;
+    /*这三个是设置滑块下面那条线的样式*/
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    /*::-webkit-slider-thumb是代表给滑块的样式进行变更*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /*//这三个是去掉滑块原有的默认样式，划重点！！*/
+    -webkit-box-shadow: 0 0 2px; /*设置滑块的阴影*/
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    background: red;
+    /*background: url("images/js2-d_03.png");*/
+    background-size: cover;
+  }
+
+  .three-btn-parent-right-style {
+    float: left;
+    width: 14%;
+    height: 66%;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding-top: 30px;
+  }
+
+  .love-btn-style {
+    float: left;
+    width: 30%;
+  }
+
+  .loop-btn-style {
+    float: left;
+    width: 30%;
+  }
+
+  .voice-btn-style {
+    width: 30%;
+  }
+
+  .title-time-style {
+    float: right;
+  }
+
+  .songer-style {
+    float: left;
+  }
+
+  .three-btn-parent-style {
+    float: left;
+    width: 14%;
+    height: 66%;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding-top: 30px;
+  }
+
+  .prev-btn-style {
+    float: left;
+    width: 30%;
+  }
+
+  .next-btn-style {
+    float: left;
+    width: 30%;
+  }
+
+  .start-pause-btn-style {
+    float: left;
+    width: 30%;
+  }
+
+  .img-div-style {
+    float: left;
+    margin-top: 10px;
+    margin-left: 0px;
+    height: 80px;
+    width: 5%;
+  }
+
+  .img-style {
+    float: left;
+    height: 60px;
+    width: 60px;
+  }
+
+  .audio-div-style {
+    float: left;
+    margin-top: 20px;
+    height: 40px;
+    width: 60%;
+  }
+
+  .audio-style {
+  }
+</style>
