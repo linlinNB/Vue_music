@@ -21,10 +21,20 @@
         <router-view></router-view>
       </keep-alive>
     </div>
-    <div class="app-foot" tabindex="0" v-on:keyup="change_music">
+
+
+
+
+    <div class="app-foot">
       <!--<p>这句话上面应该有一个audio标签，但是audio标签太丑陋了,完全没有美感，只能自定义按钮了</p>-->
-      <my-music ref="music"></my-music>
+      <mu-paper :zDepth="1">
+        <my-music ref="music"></my-music>
+      </mu-paper>
     </div>
+
+
+
+
     <my-dialog v-bind:isShow="this.isShowLogin" v-on:on-close="closeDialog('isShowLogin')">
       <login-form></login-form>
     </my-dialog>
@@ -44,7 +54,6 @@
   import logForm from '../components/logForm.vue'
   import aboutForm from '../components/about.vue'
   import regForm from '../components/regForm.vue'
-  import $ from 'jquery'
   export default{
     components: {
       'my-music': mymusic,
@@ -72,21 +81,7 @@
       },
       closeDialog: function (attr) {
         this[attr] = false
-      },
-      change_music: function () {
-        $('.app-foot').keydown(function (keyword) {
-          if (keyword.keyCode === 38) {
-            console.log('全局按键-上')
-            console.log(this.$refs.music)
-          } else if (keyword.keyCode === 40) {
-            console.log('全局按键-下')
-            console.log(this.$refs.music)
-          }
-        })
       }
-    },
-    mounted: function () {
-      $('.app-foot').focus()
     }
   }
 
@@ -94,6 +89,8 @@
 
 <!-- 在此建议使用了全局共享的一个设置，对于layout组件的作用域全面放开 -->
 <style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -113,6 +110,10 @@
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
+  }
+  body {
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
 
   .my-music {
@@ -152,6 +153,10 @@
   q:before, q:after {
     content: '';
     content: none;
+  }
+  html {
+    overflow-y: hidden;
+    overflow-y: hidden;
   }
 
   table {
@@ -267,5 +272,10 @@
   .g-form-error {
     color: red;
     padding-left: 15px;
+  }
+  .app-content {
+    position: absolute;
+    top: 90px;
+    bottom: 80px;
   }
 </style>

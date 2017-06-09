@@ -1,11 +1,16 @@
 <template>
   <div>
     <div class="index-left">
-      <p>这是主页的左侧导航栏</p>
+      <div class="nav">
+        <left-bottom-nav></left-bottom-nav>
+      </div>
+      <div class="card-song-list">
+        <left-card-songlist></left-card-songlist>
+      </div>
     </div>
     <div class="index-right">
       <p>此处应该有一个滑动组件</p>
-      <slide-show v-bind:slides="slides"></slide-show>
+      <!--<slide-show v-bind:slides="slides"></slide-show>-->
       <p>这是主页的右侧导航栏</p>
     </div>
   </div>
@@ -13,9 +18,13 @@
 
 <script>
   import slideshow from '../components/slide-show.vue'
+  import leftBottomNav from '../components/left_bottom_nav.vue'
+  import ListHeader from '../components/my_songlist_card.vue'
   export default{
     components: {
-      'slide-show': slideshow
+      'slide-show': slideshow,
+      'left-bottom-nav': leftBottomNav,
+      'left-card-songlist': ListHeader
     },
     data: function () {
       return {
@@ -56,9 +65,28 @@
 </script>
 
 <style scoped>
+  .nav {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+  .card-song-list {
+    position: absolute;
+    left: 55px;
+    top: 0;
+    bottom: 0px;
+    width: 500px;
+  }
+  html {
+    overflow-y: hidden;
+    overflow-y: hidden;
+  }
+
   .index-left {
     float: left;
-    width: 30%;
+    width: 25%;
+    height: 100%;
     text-align: left;
   }
 

@@ -91,6 +91,10 @@
 </script>
 
 <style scoped>
+  html {
+    overflow-y: hidden;
+    overflow-y: hidden;
+  }
   .slide-photo-enter-active {
     transition: all .5s;
   }
