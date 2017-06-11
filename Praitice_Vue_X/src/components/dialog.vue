@@ -74,25 +74,28 @@
   }
 
   .dialog-content {
-    width: 50%;
-    position: fixed;
-    max-height: 50%;
-    overflow: auto;
-    background: #fff;
-    top: 20%;
-    left: 50%;
-    margin-left: -25%;
-    z-index: 10;
+    width: 25%;/*整体对话框宽度*/
+    max-height: 65%;/*最大高度*/
+    overflow: auto;/*内容溢出时是否出现滚动条显示*/
+    background: #fffffa;
+    position: absolute;/*设置水平居中*/
+    text-align: center;
+    left:0;
+    right:0;
+    top: -80px;
+    bottom: 0;
+    margin: auto;
+    z-index: 10;/*元素的堆叠顺序：浮于页面上方*/
     border: 2px solid #464068;
     padding: 2%;
     line-height: 1.6;
   }
 
-  .dialog-close {
+  .dialog-close {/*关闭换成Q版小×，用子太丑；换完之后再调*/
     position: absolute;
     right: 5px;
     top: 5px;
-    width: 20px;
+    width: 40px;
     height: 20px;
     text-align: center;
     cursor: pointer;

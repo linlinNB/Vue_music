@@ -1,8 +1,11 @@
 <template>
   <div class="login-form">
+    <div class="g-from-img">
+
+    </div>
     <div class="g-form">
       <div class="g-form-line">
-        <span class="g-form-label">用户名：</span>
+        <span class="g-form-label">用户名</span>
         <div class="g-form-input">
           <!-- 此处需要注意：绑定了数据部分usernameModel -->
           <input type="text" placeholder="请输入你的用户名" v-model="usernameModel">
@@ -10,7 +13,7 @@
         <span class="g-form-error">{{ userErrors.errorText }}</span>
       </div>
       <div class="g-form-line">
-        <span class="g-form-label">密码：</span>
+        <span class="g-form-label">密&nbsp&nbsp&nbsp&nbsp码</span>
         <div class="g-form-input">
           <input type="password" placeholder="请输入密码" v-model="passwordModel">
         </div>

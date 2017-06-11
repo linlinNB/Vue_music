@@ -177,9 +177,10 @@
   }
 
   .app-head {
-    background: #363636;
+    /*background: #363636;*/
+    background-image: linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%);
     color: #b2b2b2;
-    height: 90px;
+    height: 60px;
     line-height: 90px;
     width: 100%;
   }
@@ -195,24 +196,30 @@
 
   .app-head-inner img {
     width: 50px;
-    margin-top: 20px;
+    margin-top: 8px;
   }
 
   .head-nav {
     float: right;
+    height: 60px;
   }
 
   .head-nav ul {
     overflow: hidden;
+    height: 60px;
+    margin: 0px 0px 0px 0px;
   }
 
-  .head-nav li {
-    cursor: pointer;
+  .head-nav li {/*右上角登录部分*/
+    cursor: pointer;/*设定网页浏览时用户鼠标指针的样式*/
     float: left;
+    height: 60px;
+    margin-top: -10px;
+    color: black;
   }
 
   .nav-pile {
-    padding: 0 10px;
+    padding: 0 5px;
   }
 
   .container {
@@ -237,7 +244,9 @@
   .button:hover {
     background: #4fc08d;
   }
-
+  .g-from-img{
+    height: 120px;
+  }
   .g-form {
 
   }
@@ -247,21 +256,24 @@
   }
 
   .g-form-label {
+    float: left;
+    margin-left: -40px;
     width: 100px;
-    font-size: 16px;
+    font-size: 14px;
     display: inline-block;
   }
 
   .g-form-input {
     display: inline-block;
+    width: 230px;
   }
 
   .g-form-input input {
     height: 30px;
     width: 200px;
-    line-height: 30px;
+    line-height: 60px;/*行高*/
     vertical-align: middle;
-    padding: 0 10px;
+    padding: 0 10px;/*输入字符和输入框的边距*/
     border: 1px solid #ccc;
   }
 
