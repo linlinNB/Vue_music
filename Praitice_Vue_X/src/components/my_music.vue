@@ -1,61 +1,66 @@
 <template>
-  <div>
-    <!-- 此处放置图片，点击图片设置click事件获得动画效果 -->
-    <div class="img-div-style">
-      <img class="img-style" src="../assets/images/1.png">
-    </div>
-    <!-- 此处设置动画，用来控制音量滑块的大小 -->
-
-
-    <!-- 此处设置自定义按钮，分别有三个按钮，分别是上一首，暂停，下一首 -->
-    <div class="three-btn-parent-style">
-      <!-- 此处为上一首 -->
-      <div class="prev-btn-style">
-        <button v-on:click="change_prev_song">上一首</button>
-      </div>
-      <!-- 此处为暂停/开始：这里的事件设置较为复杂 -->
-      <div class="start-pause-btn-style">
-        <button v-on:click="change_stated_pause">开始</button>
-      </div>
-      <!-- 此处为下一首 -->
-      <div class="next-btn-style">
-        <button v-on:click="change_next_song">下一首</button>
-      </div>
-    </div>
-
-
-    <!-- 此处设置audio标签可以设置为隐藏，我们只从audio标签中获取数据 -->
-    <div class="audio-div-style">
-      <!-- 此处设置了audio标签，因为后期设置的原因，样式表中修改为没有样式 -->
-      <audio class="audio-style" id="myaudio" autoplay="autoplay">
-        <source id="mysource" v-bind:src="audioitem.src" v-for="(audioitem, index) in this.songlist"/>
-        你的浏览器GG了，就是不支持audio标签
-      </audio>
-      <div>
-        <!-- 这里需要传递一个数值 -->
-        <span class="songer-style">歌唱者:{{ this.now_song_songer }}</span>
-        <span class="">歌曲名称：{{ this.now_song_songname }}</span>
-        <span class="title-time-style">{{ this.now_song_currenttime }} / {{ this.now_song_totaltime }}</span>
-      </div>
-      <!-- 此处设置了一个自定义的滑动滚动条 -->
-      <!--
-      <progress class="progress-style" v-bind:value="this.myaudio.currentTime"
-                v-bind:max="this.myaudio.duration"></progress>
-      -->
-      <input type="range" id="myrange" v-bind:min="0" v-bind:max="this.myaudio.duration"
-             v-bind:value="this.myaudio.currentTime"
-             class="slider_range" v-on:change="change_range_position">
-    </div>
-
-    <!-- 此处设置了“喜欢”按钮，我们可以设计为一个button：点击之后有不同的事件处理 -->
-    <div class="three-btn-parent-right-style">
+  <mu-paper :zDepth="1" class="music-footer">
+    <mu-row gutter>
+      <mu-col desktop="30" tablet="30" width="30">
+        <!-- 此处放置图片，点击图片设置click事件获得动画效果 -->
+        <div class="img-div-style">
+          <img class="img-style" src="../assets/images/1.png">
+        </div>
+        <!-- 此处设置自定义按钮，分别有三个按钮，分别是上一首，暂停，下一首 -->
+        <div class="three-btn-parent-style">
+          <!-- 此处为上一首 -->
+          <div class="prev-btn-style">
+            <!--<button v-on:click="change_prev_song">上一首</button>-->
+            <mu-icon-button icon="skip_previous" v-on:click="change_prev_song" tooltip="上一首"
+                            tooltipPosition="top-center"/>
+          </div>
+          <!-- 此处为暂停/开始：这里的事件设置较为复杂 -->
+          <div class="start-pause-btn-style">
+            <!--<button v-on:click="change_stated_pause">开始</button>-->
+            <mu-icon-button icon="play_arrow" v-on:click="change_stated_pause" tooltip="播放"
+                            tooltipPosition="top-center"/>
+          </div>
+          <!-- 此处为下一首 -->
+          <div class="next-btn-style">
+            <!--<button v-on:click="change_next_song">下一首</button>-->
+            <mu-icon-button icon="skip_next" v-on:click="change_next_song" tooltip="下一首" tooltipPosition="top-center"/>
+          </div>
+        </div>
+      </mu-col>
+      <mu-col desktop="50" tablet="50" width="50">
+        <!-- 此处设置audio标签可以设置为隐藏，我们只从audio标签中获取数据 -->
+        <div class="audio-div-style">
+          <!-- 此处设置了audio标签，因为后期设置的原因，样式表中修改为没有样式 -->
+          <audio class="audio-style" id="myaudio" autoplay="autoplay">
+            <source id="mysource" v-bind:src="audioitem.src" v-for="(audioitem, index) in this.songlist"/>
+            你的浏览器GG了，就是不支持audio标签
+          </audio>
+          <div>
+            <!-- 这里需要传递一个数值 -->
+            <span class="songer-style">歌唱者:{{ this.now_song_songer }}</span>
+            <span class="">歌曲名称：{{ this.now_song_songname }}</span>
+            <span class="title-time-style">{{ this.now_song_currenttime }} / {{ this.now_song_totaltime }}</span>
+          </div>
+          <!-- 此处设置了一个自定义的滑动滚动条 -->
+          <!--
+          <progress class="progress-style" v-bind:value="this.myaudio.currentTime"
+                    v-bind:max="this.myaudio.duration"></progress>
+          -->
+          <input type="range" id="myrange" v-bind:min="0" v-bind:max="this.myaudio.duration"
+                 v-bind:value="this.myaudio.currentTime"
+                 class="slider_range" v-on:change="change_range_position">
+        </div>
+      </mu-col>
+      <mu-col desktop="20" tablet="50" width="50">
+        <!-- 此处设置了“喜欢”按钮，我们可以设计为一个button：点击之后有不同的事件处理 -->
+        <div class="three-btn-parent-right-style">
       <span class="love-btn-style">
         <button>喜欢</button>
       </span>
-      <span class="loop-btn-style">
+          <span class="loop-btn-style">
         <button v-on:click="change_song_play_style">{{ this.now_song_play_style_name }}</button>
       </span>
-      <span class="voice-btn-style">
+          <span class="voice-btn-style">
         <transition name="control-voice">
           <div v-if="this.show_control_voice === true" style="position: fixed;left: 88%; top: 86%;">
             <input type="range" min="0" max="10" step="1" v-on:change="change_song_voice"
@@ -64,10 +69,11 @@
         </transition>
         <button v-on:click="show_song_voice" v-on:keyup.down="slow_down_voice" v-on:keyup.up="add_to_voice">声音</button>
       </span>
-    </div>
+        </div>
+      </mu-col>
+    </mu-row>
 
-
-  </div>
+  </mu-paper>
 </template>
 
 <script>
@@ -75,7 +81,7 @@
 
   /*  此处有问题,这个问题就是我们需要左侧导航栏和底部音乐播放器进行组件之间的互动，组件之间是同级关系，是否采用VueX，需要慎重考虑 */
   export default{
-    props: {},
+    props: [],
     data: function () {
       return {
         songlist: [],
@@ -90,29 +96,40 @@
         myaudio: ''
       }
     },
-    computed: {},
+    computed: {
+      change_songlist: function () {
+        if (this.$store.state.isShow_TypeSonglist === 1) {
+          this.songlist = this.$store.state.songlist
+        } else if (this.$store.state.isShow_TypeSonglist === 2) {
+          this.songlist = this.$store.state.lovesonglist
+        }
+        return this.songlist
+      }
+    },
     methods: {
       change_stated_pause: function () {
         if (this.now_song_position === -1) {
           console.log('初始化my_music组件的时候没有歌曲，nowsongposition = -1')
         } else {
-          if (this.myaudio.paused) {
-            this.myaudio.play()
-          } else {
+          if (this.$store.state.Change_Pause_Play === true) {
             this.myaudio.pause()
+          } else {
+            this.myaudio.play()
           }
+          this.$store.dispatch('changePausePlay')
         }
       },
       change_next_song: function () {
-        if (this.songlist.length === -1) {
+        if (this.$store.state.songlist.length === -1) {
           console.log('my_music 组件 songlist为空')
         } else {
-          if (this.now_song_position === this.songlist.length - 1) {
-            this.now_song_position = 0
+          if (this.$store.state.now_song_position === this.$store.state.songlist.length - 1) {
+            this.$store.dispatch('changeNowSongPos', 0)
           } else {
-            this.now_song_position++
+            this.$store.dispatch('changeNextSongPos')
           }
-          this.myaudio.src = this.songlist[this.now_song_position].src
+          this.get_songlist_src()
+          this.now_song_position = this.$store.state.now_song_position
           this.myaudio.play()
         }
       },
@@ -120,12 +137,14 @@
         if (this.songlist.length === -1) {
           console.log('my_music 组件 songlist为空')
         } else {
-          if (this.now_song_position === 0) {
-            this.now_song_position = this.songlist.length - 1
+          if (this.$store.state.now_song_position === 0) {
+            this.$store.dispatch('changeNowSongPos', this.songlist.length - 1)
           } else {
-            this.now_song_position--
+            this.$store.dispatch('changeProvSongPos')
           }
-          this.myaudio.src = this.songlist[this.now_song_position].src
+          console.log('此时组件的定位 = ' + this.$store.state.now_song_position)
+          this.get_songlist_src()
+          this.now_song_position = this.$store.state.now_song_position
           this.myaudio.play()
         }
       },
@@ -139,21 +158,25 @@
       },
       get_songlist_songname: function () {
         console.log('获取歌曲的名称')
-        if (this.songlist[this.now_song_position].songname === '' || this.songlist[this.now_song_position].songname === undefined) {
+        if (this.songlist[this.$store.state.now_song_position].songname === '' || this.songlist[this.$store.state.now_song_position].songname === undefined) {
           this.now_song_songname = '未知歌曲'
         } else {
-          this.now_song_songname = this.songlist[this.now_song_position].songname
+          this.now_song_songname = this.songlist[this.$store.state.now_song_position].songname
         }
         console.log('获取歌曲的名称，获取完毕')
       },
       get_songlist_songer: function () {
         console.log('获取歌手的名称')
-        if (this.songlist[this.now_song_position].songer === '' || this.songlist[this.now_song_position].songer === undefined) {
+        if (this.songlist[this.$store.state.now_song_position].songer === '' || this.songlist[this.$store.state.now_song_position].songer === undefined) {
           this.now_song_songer = '未知歌手'
         } else {
-          this.now_song_songer = this.songlist[this.now_song_position].songer
+          this.now_song_songer = this.songlist[this.$store.state.now_song_position].songer
         }
         console.log('获取歌手的名称，获取完毕')
+      },
+      get_songlist_src: function () {
+        this.myaudio.src = this.songlist[this.$store.state.now_song_position].src
+        console.log('获取歌曲的src地址，并且获取完毕')
       },
       change_range_position: function () {
         this.myaudio.currentTime = document.getElementById('myrange').value
@@ -178,14 +201,12 @@
       },
       change_song_voice: function () {
         this.myaudio.volume = (parseInt(document.getElementById('myvoice').value)) / 10
-        console.log('确认的播放音量 = ' + this.myaudio.volume)
       },
       slow_down_voice: function () {
         if (this.myaudio.volume > 0) {
           this.myaudio.volume = (this.myaudio.volume * 10 - 1) / 10
         } else {
           this.myaudio.volume = 0
-          console.log('进行了键盘事件的监听----------减少音量' + this.myaudio.volume)
         }
       },
       add_to_voice: function () {
@@ -193,38 +214,44 @@
           this.myaudio.volume = (this.myaudio.volume * 10 + 1) / 10
         } else {
           this.myaudio.volume = 1
-          console.log('进行了键盘事件的监听----------增加音量' + this.myaudio.volume)
         }
-      }
-    },
-    created: function () {
-      this.songlist = this.$store.state.songlist
-      this.now_song_position = -1
-      if (this.songlist.length >= 0) {
-        this.now_song_position = 0
-      }
-    },
-    mounted: function () {
-      console.log('mounted绑定事件出现了问题，无法进行相对事件的绑定')
-      console.log('查找了 DOM 树结构')
-      this.myaudio = document.getElementById('myaudio')
-      this.myaudio.volume = 0.5
-      this.myaudio.addEventListener('play', () => {
+      },
+      ready_to_play: function () {
         this.get_songlist_songname()
         this.get_songlist_songer()
         this.now_song_totaltime = this.transformTime(this.myaudio.duration)
         this.now_song_currenttime = this.transformTime(this.myaudio.currentTime)
+      }
+    },
+    created: function () {
+      this.songlist = this.$store.state.songlist
+      if (this.songlist.length >= 0) {
+        this.$store.dispatch('changeNextSongPos')
+      }
+      this.now_song_position = this.$store.state.now_song_position
+    },
+    mounted: function () {
+      this.myaudio = document.getElementById('myaudio')
+      this.myaudio.volume = 0
+      this.myaudio.addEventListener('play', () => {
+        this.ready_to_play()
         setInterval(() => {
+          /* 判断子组件是否切换了歌曲 */
+          if (this.$store.state.isChange_Player_Music === true) {
+            this.songlist = this.change_songlist
+            this.get_songlist_src()
+            this.$store.dispatch('changePlayerMusic', this.$store.state.now_song_position)
+            this.myaudio.play()
+          }
+          /* 对于当前歌曲进行监听，比如总时间和进度时间 */
           this.now_song_totaltime = this.transformTime(this.myaudio.duration)
           this.now_song_currenttime = this.transformTime(this.myaudio.currentTime)
-          /* 当歌曲播放完毕之后 */
+          /* 当歌曲播放完毕之后，设置了根据播放模式的选择进行下一首歌曲的自动播放 */
           if (this.myaudio.ended === true) {
-            if (this.now_song_play_style === 1) {
-              this.now_song_position = this.now_song_position
-            } else if (this.now_song_play_style === 2) {
-              this.now_song_position = parseInt(Math.floor(Math.random() * this.songlist.length)) - 1
-            } else {
-              this.now_song_position = this.now_song_position - 1
+            if (this.now_song_play_style === 2) {
+              this.$store.dispatch('changeNowSongPos', parseInt(Math.floor(Math.random() * this.$store.state.songlist.length)) - 1)
+            } else if (this.now_song_play_style === 3) {
+              this.$store.dispatch('changeProvSongPos')
             }
             this.change_next_song()
             this.myaudio.play()
@@ -235,7 +262,13 @@
   }
 </script>
 
-<style>
+<style scoped>
+  .music-footer {
+    width: 100%;
+    display: inline-block;
+    height: 80px;
+  }
+
   /* 此处设置点击动画 */
   .control-voice-enter {
     transform: translateY(50px);
@@ -320,9 +353,6 @@
   }
 
   .three-btn-parent-right-style {
-    float: left;
-    width: 14%;
-    height: 66%;
     margin-right: 10px;
     margin-left: 10px;
     padding-top: 30px;
@@ -351,12 +381,10 @@
   }
 
   .three-btn-parent-style {
-    float: left;
-    width: 14%;
-    height: 66%;
-    margin-right: 10px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 20px;
     margin-left: 10px;
-    padding-top: 30px;
   }
 
   .prev-btn-style {
@@ -375,11 +403,9 @@
   }
 
   .img-div-style {
-    float: left;
-    margin-top: 10px;
-    margin-left: 0px;
-    height: 80px;
-    width: 5%;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 13px;
   }
 
   .img-style {
@@ -389,10 +415,9 @@
   }
 
   .audio-div-style {
-    float: left;
     margin-top: 20px;
     height: 40px;
-    width: 60%;
+    width: 100%;
   }
 
   .audio-style {

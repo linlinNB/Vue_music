@@ -5,16 +5,16 @@
         <span class="g-form-label">用户名：</span>
         <div class="g-form-input">
           <!-- 此处需要注意：绑定了数据部分usernameModel -->
-          <input type="text" placeholder="请输入你的用户名" v-model="usernameModel">
+          <input type="text" placeholder="请输入你的用户名" v-model="username">
         </div>
-        <span class="g-form-error">{{ userErrors.errorText }}</span>
+        <span class="g-form-error" v-if="usernameModel.status === false">{{ usernameModel.errorText }}</span>
       </div>
       <div class="g-form-line">
         <span class="g-form-label">密码：</span>
         <div class="g-form-input">
-          <input type="password" placeholder="请输入密码" v-model="passwordModel">
+          <input type="password" placeholder="请输入密码" v-model="password">
         </div>
-        <span class="g-form-error">{{ passwordErrors.errorText }}</span>
+        <span class="g-form-error" v-if="passwordModel.status === false">{{ passwordModel.errorText }}</span>
       </div>
       <div class="g-form-line">
         <div class="g-form-btn">
@@ -31,8 +31,8 @@
   export default{
     data: function () {
       return {
-        usernameModel: '',
-        passwordModel: '',
+        username: '',
+        password: '',
         errorText: ''
       }
     },
@@ -46,56 +46,53 @@
        *   passwordErrors() : 采用了闭包了结构，虚拟了一个passwordErrors()对象
        *
        * */
-      userErrors () {
-        let errorText, status
-        if ((!/@/g.test(this.usernameModel))) {
-          status = false
-          errorText = '缺少@符号'
-        } else {
+      usernameModel () {
+        var errorText = ''
+        var status = true
+        var usernameflag = /@/g
+        if (usernameflag.test(this.username)) {
+          errorText = ''
           status = true
-          errorText = ''
-        }
-        if (this.userFlags === false) {
-          errorText = ''
-          this.userFlags = true
+        } else {
+          if (this.username === '') {
+            errorText = ''
+          } else {
+            errorText = '用户名不符合规范'
+          }
+          status = false
         }
         return {
-          status,
-          errorText
+          errorText,
+          status
         }
       },
-      passwordErrors () {
-        let errorText, status
-        if ((!/^\w{1,6}$/g.test(this.passwordModel))) {
+      passwordModel () {
+        var errorText = ''
+        var status = true
+        var passwordflag = /^\w{1,6}$/g
+        if (!passwordflag.test(this.password)) {
+          if (this.password === '') {
+            errorText = ''
+          } else {
+            errorText = '密码不符合规范'
+          }
           status = false
-          errorText = '密码不是1-6位'
         } else {
+          errorText = ''
           status = true
-          errorText = ''
-        }
-        if (!this.passwordFlags === false) {
-          errorText = ''
-          this.passwordFlags = true
         }
         return {
-          status,
-          errorText
+          errorText,
+          status
         }
       }
     },
     methods: {
       onLogin: function () {
-        if (this.userErrors.status || this.passwordErrors.status) {
-          this.errorText = '部分选项未通过'
+        if (this.usernameModel.status || this.passwordModel.status) {
+          console.log('登录成功')
         } else {
-          this.errorText = ''
-
-          this.$http.get('api/login')
-            .then((res) => {
-              this.$emit('has-log', res.data)
-            }, (error) => {
-              console.log(error)
-            })
+          this.errorText = '部分选项未通过'
         }
       }
     }
