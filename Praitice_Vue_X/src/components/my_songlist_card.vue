@@ -110,7 +110,7 @@
 
   .my_card_photo_style {
     width: 100%;
-    height: 250px;
+    height: 200px;
   }
   /*.list {*/
     /*position: absolute;*/

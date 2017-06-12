@@ -12,6 +12,7 @@
   </div>
 </template>
 
+
 <script>
   import ListHeader from '../components/my_songlist_card.vue'
   export default {

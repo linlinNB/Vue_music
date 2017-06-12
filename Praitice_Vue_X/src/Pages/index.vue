@@ -9,9 +9,9 @@
       </div>
     </div>
     <div class="index-right">
-      <p>此处应该有一个滑动组件</p>
-      <!--<slide-show v-bind:slides="slides"></slide-show>-->
-      <p>这是主页的右侧导航栏</p>
+      <!--<p>此处应该有一个滑动组件</p>
+      &lt;!&ndash;<slide-show v-bind:slides="slides"></slide-show>&ndash;&gt;
+      <p>这是主页的右侧导航栏</p>-->
     </div>
   </div>
 </template>
@@ -71,19 +71,15 @@
     top: 0;
     bottom: 0;
   }
-  .card-song-list {
+  .card-song-list {/*列表的大小与位置*/
     position: absolute;
-    left: 55px;
-    top: 0;
-    bottom: 0px;
-    width: 500px;
-  }
-  html {
-    overflow-y: hidden;
-    overflow-y: hidden;
+    left: 55px;/*列表相对左侧边栏的距离你*/
+    top: -38px;
+    bottom: -5px;
+    width: 400px;
   }
 
-  .index-left {
+  .index-left {/**/
     float: left;
     width: 25%;
     height: 100%;
