@@ -1,6 +1,7 @@
 <template>
   <mu-paper :zDepth="1">
-    <input type="file" id="file" style="display: none" value="G:\music">
+    <!--<input type="file" id="file" style="display: none" value="G:\music">-->
+    <!-- 重新规划一下，歌单之间的宽度问题 -->
     <mu-card class="my_card_paper_style">
       <!--<mu-card-header title="Myron Avatar" subTitle="sub title">
       </mu-card-header>-->

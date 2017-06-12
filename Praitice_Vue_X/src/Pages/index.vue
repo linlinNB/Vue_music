@@ -9,8 +9,9 @@
       </div>
     </div>
     <div class="index-right">
-      <p>此处应该有一个滑动组件</p>
-      <!--<slide-show v-bind:slides="slides"></slide-show>-->
+      <div class="nav_right">
+        <slide-show v-bind:slides="slides"></slide-show>
+      </div>
       <p>这是主页的右侧导航栏</p>
     </div>
   </div>
@@ -65,19 +66,28 @@
 </script>
 
 <style scoped>
+  .index-right {
+    position: absolute;
+    left: 450px;
+    width: 70%;
+    top: 0;
+    bottom: 0;
+  }
   .nav {
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
   }
+
   .card-song-list {
     position: absolute;
     left: 55px;
     top: 0;
     bottom: 0px;
-    width: 500px;
+    width: 350px;
   }
+
   html {
     overflow-y: hidden;
     overflow-y: hidden;
@@ -88,11 +98,6 @@
     width: 25%;
     height: 100%;
     text-align: left;
-  }
-
-  .index-right {
-    float: left;
-    width: 70%;
   }
 
   .index-wrap {
