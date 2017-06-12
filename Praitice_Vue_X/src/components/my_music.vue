@@ -11,15 +11,19 @@
           <!-- 此处为上一首 -->
           <div class="prev-btn-style">
             <!--<button v-on:click="change_prev_song">上一首</button>-->
-            <mu-icon-button icon="android" v-on:click="change_prev_song"/>
+            <mu-icon-button icon="skip_previous" v-on:click="change_prev_song" tooltip="上一首"
+                            tooltipPosition="top-center"/>
           </div>
           <!-- 此处为暂停/开始：这里的事件设置较为复杂 -->
           <div class="start-pause-btn-style">
-            <button v-on:click="change_stated_pause">开始</button>
+            <!--<button v-on:click="change_stated_pause">开始</button>-->
+            <mu-icon-button icon="play_arrow" v-on:click="change_stated_pause" tooltip="播放"
+                            tooltipPosition="top-center"/>
           </div>
           <!-- 此处为下一首 -->
           <div class="next-btn-style">
-            <button v-on:click="change_next_song">下一首</button>
+            <!--<button v-on:click="change_next_song">下一首</button>-->
+            <mu-icon-button icon="skip_next" v-on:click="change_next_song" tooltip="下一首" tooltipPosition="top-center"/>
           </div>
         </div>
       </mu-col>
@@ -80,7 +84,7 @@
     props: [],
     data: function () {
       return {
-        now_song_state_flag: true,
+        songlist: [],
         now_song_position: -1,
         now_song_totaltime: '00:00:00',
         now_song_currenttime: '00:00:00',
@@ -92,7 +96,16 @@
         myaudio: ''
       }
     },
-    computed: {},
+    computed: {
+      change_songlist: function () {
+        if (this.$store.state.isShow_TypeSonglist === 1) {
+          this.songlist = this.$store.state.songlist
+        } else if (this.$store.state.isShow_TypeSonglist === 2) {
+          this.songlist = this.$store.state.lovesonglist
+        }
+        return this.songlist
+      }
+    },
     methods: {
       change_stated_pause: function () {
         if (this.now_song_position === -1) {
@@ -121,7 +134,7 @@
         }
       },
       change_prev_song: function () {
-        if (this.$store.state.songlist.length === -1) {
+        if (this.songlist.length === -1) {
           console.log('my_music 组件 songlist为空')
         } else {
           if (this.$store.state.now_song_position === 0) {
@@ -145,24 +158,24 @@
       },
       get_songlist_songname: function () {
         console.log('获取歌曲的名称')
-        if (this.$store.state.songlist[this.$store.state.now_song_position].songname === '' || this.$store.state.songlist[this.$store.state.now_song_position].songname === undefined) {
+        if (this.songlist[this.$store.state.now_song_position].songname === '' || this.songlist[this.$store.state.now_song_position].songname === undefined) {
           this.now_song_songname = '未知歌曲'
         } else {
-          this.now_song_songname = this.$store.state.songlist[this.$store.state.now_song_position].songname
+          this.now_song_songname = this.songlist[this.$store.state.now_song_position].songname
         }
         console.log('获取歌曲的名称，获取完毕')
       },
       get_songlist_songer: function () {
         console.log('获取歌手的名称')
-        if (this.$store.state.songlist[this.$store.state.now_song_position].songer === '' || this.$store.state.songlist[this.$store.state.now_song_position].songer === undefined) {
+        if (this.songlist[this.$store.state.now_song_position].songer === '' || this.songlist[this.$store.state.now_song_position].songer === undefined) {
           this.now_song_songer = '未知歌手'
         } else {
-          this.now_song_songer = this.$store.state.songlist[this.$store.state.now_song_position].songer
+          this.now_song_songer = this.songlist[this.$store.state.now_song_position].songer
         }
         console.log('获取歌手的名称，获取完毕')
       },
       get_songlist_src: function () {
-        this.myaudio.src = this.$store.state.songlist[this.$store.state.now_song_position].src
+        this.myaudio.src = this.songlist[this.$store.state.now_song_position].src
         console.log('获取歌曲的src地址，并且获取完毕')
       },
       change_range_position: function () {
@@ -223,23 +236,21 @@
       this.myaudio.addEventListener('play', () => {
         this.ready_to_play()
         setInterval(() => {
+          /* 判断子组件是否切换了歌曲 */
           if (this.$store.state.isChange_Player_Music === true) {
-            console.log('在歌词列表中切换了歌曲，这是子组件 和 数据仓库 中的数据不同')
+            this.songlist = this.change_songlist
             this.get_songlist_src()
             this.$store.dispatch('changePlayerMusic', this.$store.state.now_song_position)
-            console.log('在歌词列表中切换了歌曲，这是子组件 和 数据仓库 相同')
             this.myaudio.play()
           }
+          /* 对于当前歌曲进行监听，比如总时间和进度时间 */
           this.now_song_totaltime = this.transformTime(this.myaudio.duration)
           this.now_song_currenttime = this.transformTime(this.myaudio.currentTime)
-          /* 当歌曲播放完毕之后 */
+          /* 当歌曲播放完毕之后，设置了根据播放模式的选择进行下一首歌曲的自动播放 */
           if (this.myaudio.ended === true) {
-            if (this.now_song_play_style === 1) {
-              /* this.now_song_position = this.now_song_position */
-              /* 此处可以不需要书写 */
-            } else if (this.now_song_play_style === 2) {
+            if (this.now_song_play_style === 2) {
               this.$store.dispatch('changeNowSongPos', parseInt(Math.floor(Math.random() * this.$store.state.songlist.length)) - 1)
-            } else {
+            } else if (this.now_song_play_style === 3) {
               this.$store.dispatch('changeProvSongPos')
             }
             this.change_next_song()
@@ -257,6 +268,7 @@
     display: inline-block;
     height: 80px;
   }
+
   /* 此处设置点击动画 */
   .control-voice-enter {
     transform: translateY(50px);

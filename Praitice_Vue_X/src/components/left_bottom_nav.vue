@@ -5,8 +5,8 @@
         <mu-icon-button class="left_menu_item_style" icon="music_video" v-on:click="showTypeSonglist(1)"/>
         <br>
         <mu-icon-button class="left_menu_item_style" icon="favorite_border" v-on:click="showTypeSonglist(2)"/>
-        <br>
-        <mu-icon-button class="left_menu_item_style" icon="file_download" v-on:click="showTypeSonglist(3)"/>
+        <!--<br>
+        <mu-icon-button class="left_menu_item_style" icon="file_download" v-on:click="showTypeSonglist(3)"/>-->
       </mu-paper>
     </div>
   </div>
@@ -62,7 +62,7 @@
   .left_menu_item_style {
     /*-webkit-transform: rotate(90deg);*/
     /* for Chrome || Safari */
-    height: 33%;
+    height: 50%;
 
   }
 

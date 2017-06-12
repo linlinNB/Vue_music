@@ -45,12 +45,28 @@ const myStore = new Vuex.Store({
         songer: '押尾光太郎'
       }
     ],
+    lovesonglist: [
+      {
+        src: '../../static/music/一个人.mp3',
+        songname: '一个人',
+        songer: '韩红'
+      },
+      {
+        src: '../../static/music/那片海.mp3',
+        songername: '那片海',
+        songer: '韩红'
+      }
+    ],
+    local_songlist: [],
     LoginInfo: false,
     now_song_position: -1,
     isShow_TypeSonglist: 1,
     Change_Player_Music: false,
     Change_Pause_Play: true,
-    isChange_Player_Music: false
+    isChange_Player_Music: false,
+    userInfo: {
+      username: ''
+    }
   },
   mutations: {
     showsonglistNum (state) {
@@ -85,6 +101,15 @@ const myStore = new Vuex.Store({
     },
     changePausePlay (state) {
       state.Change_Pause_Play === true ? state.Change_Pause_Play = false : state.Change_Pause_Play = true
+    },
+    addSong (state, type, songname, songer, src) {
+      /* 添加了 */
+      if (type === 1) {
+        state.songlist.push({songname, songer, src})
+      } else if (type === 2) {
+        /* 这里需要添加 "我喜爱" 的歌单 */
+        state.lovesonglist.push({songname, songer, src})
+      }
     }
   },
   actions: {
@@ -105,6 +130,9 @@ const myStore = new Vuex.Store({
     },
     changePausePlay ({commit}) {
       commit('changePausePlay')
+    },
+    addSong ({commit}, type, songname, songer, src) {
+      commit('addSong', type, songname, songer, src)
     }
   }
 })

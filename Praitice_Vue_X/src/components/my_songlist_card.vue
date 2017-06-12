@@ -1,5 +1,6 @@
 <template>
   <mu-paper :zDepth="1">
+    <input type="file" id="file" style="display: none" value="G:\music">
     <mu-card class="my_card_paper_style">
       <!--<mu-card-header title="Myron Avatar" subTitle="sub title">
       </mu-card-header>-->
@@ -15,7 +16,7 @@
       <!-- 此处设置表单内容 -->
       <div class="demo-infinite-container" ref="songlistscroll">
         <mu-list class="list">
-          <template v-for="(item, index) in songlist">
+          <template  v-for="(item, index) in change_songlist">
             <mu-list-item v-bind:title="item.songname" v-bind:describeText="item.songer"
                           toggleNested disabled disableRipple>
               <mu-list-item slot="left" tooltip="播放" disabled>
@@ -72,6 +73,7 @@
       }
     },
     created () {
+        /* 进行DOM树 正式建立的时候进行的操作 */
       this.songlist = this.$store.state.songlist
       this.num = this.songlist.length
     },
@@ -87,13 +89,17 @@
         }, 2000)
       },
       change_song: function (index) {
-        console.log('出发了歌单中的改变歌曲')
         this.$store.dispatch('changePlayerMusic', index)
       }
     },
     computed: {
-      change_ShowSonglist: function () {
-        this.$store.state.isShow_TypeSonglist
+      change_songlist: function () {
+        if (this.$store.state.isShow_TypeSonglist === 1) {
+          this.songlist = this.$store.state.songlist
+        } else if (this.$store.state.isShow_TypeSonglist === 2) {
+          this.songlist = this.$store.state.lovesonglist
+        }
+        return this.songlist
       }
     }
   }
@@ -112,13 +118,7 @@
     width: 100%;
     height: 250px;
   }
-  /*.list {*/
-    /*position: absolute;*/
-    /*top: 305px;*/
-    /*bottom: 0px;*/
-    /*overflow: auto;*/
-    /*-webkit-overflow-scrolling: touch;*/
-  /*}*/
+
   .demo-infinite-container {
     width: 100%;
     border: 1px solid #d9d9d9;

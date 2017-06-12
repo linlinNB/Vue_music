@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "fs": "0.0.1-security",
     "jquery": "^3.2.1",
     "vue": "^2.3.3",
     "vue-router": "^2.3.1",
