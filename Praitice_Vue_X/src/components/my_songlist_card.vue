@@ -17,26 +17,26 @@
       <!-- 此处设置表单内容 -->
       <div class="demo-infinite-container" ref="songlistscroll">
         <mu-list class="list">
-          <template  v-for="(item, index) in change_songlist">
+          <template v-for="(item, index) in change_songlist">
             <mu-list-item v-bind:title="item.songname" v-bind:describeText="item.songer"
                           toggleNested disabled disableRipple>
               <mu-list-item slot="left" tooltip="播放" disabled>
                 <mu-icon-button icon="play_circle_outline" v-on:click="change_song(index)"/>
               </mu-list-item>
               <mu-list-item title="添加" slot="nested" inset>
-                <mu-avatar icon="add_circle_outline" slot="leftAvatar"/>
+                <mu-avatar icon="add_circle_outline" slot="leftAvatar" v-on:click="addSong(index)"/>
               </mu-list-item>
               <mu-list-item title="下载" slot="nested" inset>
                 <mu-avatar icon="file_download" slot="leftAvatar"/>
               </mu-list-item>
               <mu-list-item title="删除" slot="nested" inset>
-                <mu-avatar icon="delete_forever" slot="leftAvatar"/>
+                <mu-avatar icon="delete_forever" slot="leftAvatar" v-on:click="delete_song(index)"/>
               </mu-list-item>
             </mu-list-item>
             <mu-divider/>
           </template>
-          <mu-infinite-scroll v-bind:scroller="scroller" v-bind:loading="loading" v-on:load="loadMore"
-                              loadingText="加载ing"/>
+          <!--<mu-infinite-scroll v-bind:scroller="scroller" v-bind:loading="loading" v-on:load="loadMore"
+                              loadingText="加载ing"/>-->
         </mu-list>
       </div>
     </mu-card>
@@ -74,7 +74,7 @@
       }
     },
     created () {
-        /* 进行DOM树 正式建立的时候进行的操作 */
+      /* 进行DOM树 正式建立的时候进行的操作 */
       this.songlist = this.$store.state.songlist
       this.num = this.songlist.length
     },
@@ -91,6 +91,27 @@
       },
       change_song: function (index) {
         this.$store.dispatch('changePlayerMusic', index)
+      },
+      delete_song: function (index) {
+        console.log('响应了删除事件')
+        console.log('获取当前表单的位置 = ' + index)
+        this.$store.dispatch('deleteSong', this.$store.state.isShow_TypeSonglist, index)
+      },
+      addSong: function (index) {
+        let pushSong = [
+          {
+            type: 2
+          },
+          {
+            songname: this.songlist[index].songname,
+            songer: this.songlist[index].songer,
+            src: this.songlist[index].src
+          }
+        ]
+        /* console.log('进行装载的数据 = ' + needPushSong.songname)
+         console.log('进行装载的数据 = ' + needPushSong.songer) */
+        /* this.$store.commit('addSong_Name', 2, songname, songer, src) */
+        this.$store.dispatch('addSong', pushSong)
       }
     },
     computed: {
@@ -107,6 +128,8 @@
 </script>
 
 <style>
+
+
   .my_card_paper_style {
     position: absolute;
     display: inline-block;

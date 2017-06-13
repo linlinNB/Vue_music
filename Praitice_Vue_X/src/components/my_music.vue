@@ -17,7 +17,10 @@
           <!-- 此处为暂停/开始：这里的事件设置较为复杂 -->
           <div class="start-pause-btn-style">
             <!--<button v-on:click="change_stated_pause">开始</button>-->
-            <mu-icon-button icon="play_arrow" v-on:click="change_stated_pause" tooltip="播放"
+            <mu-icon-button v-if="this.now_play_pause === false" icon="play_arrow" v-on:click="change_stated_pause"
+                            tooltip="播放"
+                            tooltipPosition="top-center"/>
+            <mu-icon-button v-else icon="pause" v-on:click="change_stated_pause" tooltip="播放"
                             tooltipPosition="top-center"/>
           </div>
           <!-- 此处为下一首 -->
@@ -55,11 +58,20 @@
         <!-- 此处设置了“喜欢”按钮，我们可以设计为一个button：点击之后有不同的事件处理 -->
         <div class="three-btn-parent-right-style">
       <span class="love-btn-style">
-        <button>喜欢</button>
+        <!--<button>喜欢</button>-->
+        <mu-icon-button icon="favorite_border" tooltip="喜爱" tooltipPosition="top-center"/>
       </span>
           <span class="loop-btn-style">
-        <button v-on:click="change_song_play_style">{{ this.now_song_play_style_name }}</button>
-      </span>
+            <mu-icon-button v-if="this.now_song_play_style === 1" icon="playlist_play"
+                            v-on:click="change_song_play_style" v-bind:tooltip="this.now_song_play_style_name"
+                            tooltipPosition="top-center"/>
+            <mu-icon-button v-else-if="this.now_song_play_style === 2" icon="swap_calls"
+                            v-on:click="change_song_play_style" v-bind:tooltip="this.now_song_play_style_name"
+                            tooltipPosition="top-center"/>
+            <mu-icon-button v-else icon="repeat_one" v-on:click="change_song_play_style"
+                            v-bind:tooltip="this.now_song_play_style_name" tooltipPosition="top-center"/>
+          </span>
+          </span>
           <span class="voice-btn-style">
         <transition name="control-voice">
           <div v-if="this.show_control_voice === true" style="position: fixed;left: 88%; top: 86%;">
@@ -67,7 +79,8 @@
                    v-bind:value="parseInt(this.myaudio.volume * 10)" id="myvoice">
           </div>
         </transition>
-        <button v-on:click="show_song_voice" v-on:keyup.down="slow_down_voice" v-on:keyup.up="add_to_voice">声音</button>
+            <mu-icon-button icon="settings_voice" v-on:click="show_song_voice" v-on:keyup.down="slow_down_voice"
+                            v-on:keyup.up="add_to_voice" tooltip="声音" tooltipPosition="top-center"/>
       </span>
         </div>
       </mu-col>
@@ -93,6 +106,7 @@
         now_song_play_style: 1,
         now_song_play_style_name: '顺序播放',
         show_control_voice: false,
+        now_play_pause: true,
         myaudio: ''
       }
     },
@@ -112,8 +126,10 @@
           console.log('初始化my_music组件的时候没有歌曲，nowsongposition = -1')
         } else {
           if (this.$store.state.Change_Pause_Play === true) {
+            this.now_play_pause = false
             this.myaudio.pause()
           } else {
+            this.now_play_pause = true
             this.myaudio.play()
           }
           this.$store.dispatch('changePausePlay')
@@ -130,6 +146,8 @@
           }
           this.get_songlist_src()
           this.now_song_position = this.$store.state.now_song_position
+          /* 设置当前播放的界面图标 */
+          this.now_play_pause = true
           this.myaudio.play()
         }
       },
@@ -145,6 +163,8 @@
           console.log('此时组件的定位 = ' + this.$store.state.now_song_position)
           this.get_songlist_src()
           this.now_song_position = this.$store.state.now_song_position
+          /* 设置当前并播放的界面图标 */
+          this.now_play_pause = true
           this.myaudio.play()
         }
       },
@@ -241,6 +261,7 @@
             this.songlist = this.change_songlist
             this.get_songlist_src()
             this.$store.dispatch('changePlayerMusic', this.$store.state.now_song_position)
+            this.now_play_pause = true
             this.myaudio.play()
           }
           /* 对于当前歌曲进行监听，比如总时间和进度时间 */
@@ -254,6 +275,8 @@
               this.$store.dispatch('changeProvSongPos')
             }
             this.change_next_song()
+            /* 设置当前界面播放的图标 */
+            this.now_play_pause = true
             this.myaudio.play()
           }
         }, 100)

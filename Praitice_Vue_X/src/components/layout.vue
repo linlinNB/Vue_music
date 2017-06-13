@@ -23,16 +23,12 @@
     </div>
 
 
-
-
     <div class="app-foot">
       <!--<p>这句话上面应该有一个audio标签，但是audio标签太丑陋了,完全没有美感，只能自定义按钮了</p>-->
       <mu-paper :zDepth="1">
         <my-music ref="music"></my-music>
       </mu-paper>
     </div>
-
-
 
 
     <my-dialog v-bind:isShow="this.isShowLogin" v-on:on-close="closeDialog('isShowLogin')">
@@ -89,8 +85,6 @@
 
 <!-- 在此建议使用了全局共享的一个设置，对于layout组件的作用域全面放开 -->
 <style>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -111,6 +105,7 @@
     font: inherit;
     vertical-align: baseline;
   }
+
   body {
     overflow-y: hidden;
     overflow-x: hidden;
@@ -154,6 +149,7 @@
     content: '';
     content: none;
   }
+
   html {
     overflow-y: hidden;
     overflow-y: hidden;
@@ -273,6 +269,7 @@
     color: red;
     padding-left: 15px;
   }
+
   .app-content {
     position: absolute;
     top: 90px;

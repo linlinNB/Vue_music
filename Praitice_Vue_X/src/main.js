@@ -102,13 +102,29 @@ const myStore = new Vuex.Store({
     changePausePlay (state) {
       state.Change_Pause_Play === true ? state.Change_Pause_Play = false : state.Change_Pause_Play = true
     },
-    addSong (state, type, songname, songer, src) {
-      /* 添加了 */
-      if (type === 1) {
-        state.songlist.push({songname, songer, src})
-      } else if (type === 2) {
+    addSong (state, needPushSong) {
+      /* 进行添加歌曲的操作 */
+      if (needPushSong[0].type === 1) {
+        state.songlist.push(needPushSong[1])
+      } else if (needPushSong[0].type === 2) {
         /* 这里需要添加 "我喜爱" 的歌单 */
-        state.lovesonglist.push({songname, songer, src})
+        console.log('响应了"我喜爱"的歌单事件，即将的进行的装在数据 = ' + needPushSong[1].songname)
+        state.lovesonglist.push(needPushSong[1])
+      }
+    },
+    addSong_Name (state, type, pushSongname, pushSonger, pushSongsrc) {
+      if (type === 1) {
+        console.log('我们没有响应第一个事件，所以不做任何处理')
+      } else if (type === 2) {
+        console.log('获取真正处理的数据  = ' + pushSongname)
+        state.lovesonglist.push({pushSongname, pushSonger, pushSongsrc})
+      }
+    },
+    deleteSong (state, type, position) {
+      if (type === 1) {
+        state.songlist.splice(position, 1)
+      } else if (type === 2) {
+        state.lovesonglist.splice(position, 1)
       }
     }
   },
@@ -131,8 +147,11 @@ const myStore = new Vuex.Store({
     changePausePlay ({commit}) {
       commit('changePausePlay')
     },
-    addSong ({commit}, type, songname, songer, src) {
-      commit('addSong', type, songname, songer, src)
+    addSong ({commit}, needPushSong) {
+      commit('addSong', needPushSong)
+    },
+    deleteSong ({commit}, type, position) {
+      commit('deleteSong', type, position)
     }
   }
 })
