@@ -1,30 +1,21 @@
 <template>
   <div>
     <div class="index-left">
-      <div class="nav">
-        <left-bottom-nav></left-bottom-nav>
-      </div>
-      <div class="card-song-list">
-        <left-card-songlist></left-card-songlist>
-      </div>
+      <p>这是主页的左侧导航栏</p>
     </div>
     <div class="index-right">
-      <!--<p>此处应该有一个滑动组件</p>
-      &lt;!&ndash;<slide-show v-bind:slides="slides"></slide-show>&ndash;&gt;
-      <p>这是主页的右侧导航栏</p>-->
+      <p>此处应该有一个滑动组件</p>
+      <slide-show v-bind:slides="slides"></slide-show>
+      <p>这是主页的右侧导航栏</p>
     </div>
   </div>
 </template>
 
 <script>
   import slideshow from '../components/slide-show.vue'
-  import leftBottomNav from '../components/left_bottom_nav.vue'
-  import ListHeader from '../components/my_songlist_card.vue'
   export default{
     components: {
-      'slide-show': slideshow,
-      'left-bottom-nav': leftBottomNav,
-      'left-card-songlist': ListHeader
+      'slide-show': slideshow
     },
     data: function () {
       return {
@@ -65,24 +56,9 @@
 </script>
 
 <style scoped>
-  .nav {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-  }
-  .card-song-list {/*列表的大小与位置*/
-    position: absolute;
-    left: 55px;/*列表相对左侧边栏的距离你*/
-    top: -38px;
-    bottom: -5px;
-    width: 400px;
-  }
-
-  .index-left {/**/
+  .index-left {
     float: left;
-    width: 25%;
-    height: 100%;
+    width: 30%;
     text-align: left;
   }
 

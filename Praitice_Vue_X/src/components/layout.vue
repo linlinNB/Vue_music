@@ -21,20 +21,10 @@
         <router-view></router-view>
       </keep-alive>
     </div>
-
-
-
-
-    <div class="app-foot">
+    <div class="app-foot" tabindex="0" v-on:keyup="change_music">
       <!--<p>这句话上面应该有一个audio标签，但是audio标签太丑陋了,完全没有美感，只能自定义按钮了</p>-->
-      <mu-paper :zDepth="1">
-        <my-music ref="music"></my-music>
-      </mu-paper>
+      <my-music ref="music"></my-music>
     </div>
-
-
-
-
     <my-dialog v-bind:isShow="this.isShowLogin" v-on:on-close="closeDialog('isShowLogin')">
       <login-form></login-form>
     </my-dialog>
@@ -54,6 +44,7 @@
   import logForm from '../components/logForm.vue'
   import aboutForm from '../components/about.vue'
   import regForm from '../components/regForm.vue'
+  import $ from 'jquery'
   export default{
     components: {
       'my-music': mymusic,
@@ -81,7 +72,21 @@
       },
       closeDialog: function (attr) {
         this[attr] = false
+      },
+      change_music: function () {
+        $('.app-foot').keydown(function (keyword) {
+          if (keyword.keyCode === 38) {
+            console.log('全局按键-上')
+            console.log(this.$refs.music)
+          } else if (keyword.keyCode === 40) {
+            console.log('全局按键-下')
+            console.log(this.$refs.music)
+          }
+        })
       }
+    },
+    mounted: function () {
+      $('.app-foot').focus()
     }
   }
 
@@ -89,8 +94,6 @@
 
 <!-- 在此建议使用了全局共享的一个设置，对于layout组件的作用域全面放开 -->
 <style>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -110,10 +113,6 @@
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-  }
-  body {
-    overflow-y: hidden;
-    overflow-x: hidden;
   }
 
   .my-music {
@@ -154,10 +153,6 @@
     content: '';
     content: none;
   }
-  html {
-    overflow-y: hidden;
-    overflow-y: hidden;
-  }
 
   table {
     border-collapse: collapse;
@@ -177,10 +172,9 @@
   }
 
   .app-head {
-    /*background: #363636;*/
-    background-image: linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%);
+    background: #363636;
     color: #b2b2b2;
-    height: 60px;
+    height: 90px;
     line-height: 90px;
     width: 100%;
   }
@@ -196,30 +190,24 @@
 
   .app-head-inner img {
     width: 50px;
-    margin-top: 8px;
+    margin-top: 20px;
   }
 
   .head-nav {
     float: right;
-    height: 60px;
   }
 
   .head-nav ul {
     overflow: hidden;
-    height: 60px;
-    margin: 0px 0px 0px 0px;
   }
 
-  .head-nav li {/*右上角登录部分*/
-    cursor: pointer;/*设定网页浏览时用户鼠标指针的样式*/
+  .head-nav li {
+    cursor: pointer;
     float: left;
-    height: 60px;
-    margin-top: -10px;
-    color: black;
   }
 
   .nav-pile {
-    padding: 0 5px;
+    padding: 0 10px;
   }
 
   .container {
@@ -244,9 +232,7 @@
   .button:hover {
     background: #4fc08d;
   }
-  .g-from-img{
-    height: 120px;
-  }
+
   .g-form {
 
   }
@@ -256,24 +242,21 @@
   }
 
   .g-form-label {
-    float: left;
-    margin-left: -40px;
     width: 100px;
-    font-size: 14px;
+    font-size: 16px;
     display: inline-block;
   }
 
   .g-form-input {
     display: inline-block;
-    width: 230px;
   }
 
   .g-form-input input {
     height: 30px;
     width: 200px;
-    line-height: 60px;/*行高*/
+    line-height: 30px;
     vertical-align: middle;
-    padding: 0 10px;/*输入字符和输入框的边距*/
+    padding: 0 10px;
     border: 1px solid #ccc;
   }
 
@@ -284,10 +267,5 @@
   .g-form-error {
     color: red;
     padding-left: 15px;
-  }
-  .app-content {
-    position: absolute;
-    top: 90px;
-    bottom: 80px;
   }
 </style>
