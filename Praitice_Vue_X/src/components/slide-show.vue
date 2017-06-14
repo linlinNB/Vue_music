@@ -107,11 +107,12 @@
   }
 
   .slide-show {
-    position: relative;
-    margin: 15px 15px 15px 0px;
-    width: 900px;
-    height: 500px;
+    position: fixed;
+    margin-top: 10px;
+    width: 800px;
+    height: 330px;
     overflow: hidden;
+    left: 40%;
   }
 
   .slide-img {

@@ -58,7 +58,6 @@
         <!-- 此处设置了“喜欢”按钮，我们可以设计为一个button：点击之后有不同的事件处理 -->
         <div class="three-btn-parent-right-style">
       <span class="love-btn-style">
-        <!--<button>喜欢</button>-->
         <mu-icon-button icon="favorite_border" tooltip="喜爱" tooltipPosition="top-center"/>
       </span>
           <span class="loop-btn-style">
@@ -71,17 +70,18 @@
             <mu-icon-button v-else icon="repeat_one" v-on:click="change_song_play_style"
                             v-bind:tooltip="this.now_song_play_style_name" tooltipPosition="top-center"/>
           </span>
-          </span>
           <span class="voice-btn-style">
-        <transition name="control-voice">
-          <div v-if="this.show_control_voice === true" style="position: fixed;left: 88%; top: 86%;">
-            <input type="range" min="0" max="10" step="1" v-on:change="change_song_voice"
-                   v-bind:value="parseInt(this.myaudio.volume * 10)" id="myvoice">
+            <!-- 弹出的音量控制，左右的音量图标可以自己设置 -->
+            <transition name="control-voice">
+          <div v-if="this.show_control_voice === true" class="voice_control_center">
+            <mu-slider v-model="voice_value" :step="1" class="test_style"/>
           </div>
-        </transition>
-            <mu-icon-button icon="settings_voice" v-on:click="show_song_voice" v-on:keyup.down="slow_down_voice"
-                            v-on:keyup.up="add_to_voice" tooltip="声音" tooltipPosition="top-center"/>
-      </span>
+            </transition>
+            <mu-icon v-if="this.show_control_voice === true" value="volume_down" color="" class="voice_slow_down"/>
+            <mu-icon v-if="this.show_control_voice === true" value="volume_up" color="" class="voice_add_up"/>
+        <mu-icon-button icon="settings_voice" v-on:click="show_song_voice" v-on:keyup.down="slow_down_voice"
+                        v-on:keyup.up="add_to_voice" tooltip="声音" tooltipPosition="top-center"/>
+        </span>
         </div>
       </mu-col>
     </mu-row>
@@ -107,7 +107,14 @@
         now_song_play_style_name: '顺序播放',
         show_control_voice: false,
         now_play_pause: true,
-        myaudio: ''
+        myaudio: '',
+        voice_value: 0
+      }
+    },
+    watch: {
+      voice_value: function () {
+        console.log('放生了音量的改变 , 改变的数值大小 = ' + this.voice_value)
+        this.change_song_voice()
       }
     },
     computed: {
@@ -220,7 +227,10 @@
         console.log('切换了show_control_voice' + this.show_control_voice)
       },
       change_song_voice: function () {
-        this.myaudio.volume = (parseInt(document.getElementById('myvoice').value)) / 10
+        console.log('出发了 改变声音的事件 ， 当前的数值 = ' + this.voice_value)
+        /* this.myaudio.volume = parseInt(this.voice_value / 100) */
+        this.myaudio.volume = parseFloat(this.voice_value / 100)
+        console.log('改变的声音 = ' + parseFloat(this.voice_value / 100))
       },
       slow_down_voice: function () {
         if (this.myaudio.volume > 0) {
@@ -286,11 +296,6 @@
 </script>
 
 <style scoped>
-  .music-footer {
-    width: 100%;
-    display: inline-block;
-    height: 80px;
-  }
 
   /* 此处设置点击动画 */
   .control-voice-enter {
@@ -344,6 +349,34 @@
     }
   }
 
+  .voice_slow_down {
+    position: fixed;
+    left: 85%;
+    top: 88%;
+  }
+
+  .voice_add_up {
+    position: fixed;
+    left: 98%;
+    top: 88%;
+  }
+
+  .voice_control_center {
+    position: fixed;
+    left: 87%;
+    top: 88%;
+  }
+
+  .test_style {
+    width: 200px;
+  }
+
+  .music-footer {
+    width: 100%;
+    display: inline-block;
+    height: 80px;
+  }
+
   /*开始设置音乐播放器组件的特殊样式，自己也算是学习一些真正的css
       过程步骤：
       1.去除原来的样式
@@ -370,7 +403,7 @@
     border-radius: 50%;
     width: 13px;
     height: 13px;
-    background: red;
+    background: blue;
     /*background: url("images/js2-d_03.png");*/
     background-size: cover;
   }

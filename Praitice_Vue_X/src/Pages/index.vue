@@ -8,11 +8,13 @@
         <left-card-songlist></left-card-songlist>
       </div>
     </div>
+
+
     <div class="index-right">
-      <div class="nav_right">
-        <slide-show v-bind:slides="slides"></slide-show>
+      <slide-show v-bind:slides="slides" class="show_Slide_position"></slide-show>
+      <div>
+        <p>这是主页的右侧导航栏</p>
       </div>
-      <p>这是主页的右侧导航栏</p>
     </div>
   </div>
 </template>
@@ -73,6 +75,7 @@
     top: 0;
     bottom: 0;
   }
+
   .nav {
     position: absolute;
     left: 0;
@@ -98,18 +101,6 @@
     width: 25%;
     height: 100%;
     text-align: left;
-  }
-
-  .index-wrap {
-    width: 1200px;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-
-  .index-left-block {
-    margin: 15px;
-    background: #fff;
-    box-shadow: 0 0 1px #ddd;
   }
 
   .index-left-block .hr {

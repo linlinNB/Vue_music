@@ -1,5 +1,6 @@
 <template>
   <mu-paper :zDepth="1">
+    <!-- 此处有问题，需要重新设置设置一下，我的文件向上传递的情况，对于文件无法传递问题，这里采用display：none的方式进行隐藏 -->
     <!--<input type="file" id="file" style="display: none" value="G:\music">-->
     <!-- 重新规划一下，歌单之间的宽度问题 -->
     <mu-card class="my_card_paper_style">
@@ -9,11 +10,24 @@
                      v-bind:subTitle="this.songlist_card_name[this.$store.state.isShow_TypeSonglist - 1].subtitle">
         <img v-bind:src="this.srclist[this.$store.state.isShow_TypeSonglist - 1].src" class="my_card_photo_style">
       </mu-card-media>
+      <mu-paper>
       <mu-card-actions>
-        <mu-flat-button label="历史"/>
+        <mu-tabs :value="activeTab" @change="handleTabChange" class="tab_background_style" lineClass="line_style">
+          <mu-tab value="tab1">
+            <mu-flat-button label="历史" rippleOpacity="0" color="#7e57c2"/>
+          </mu-tab>
+          <mu-tab value="tab2">
+            <mu-flat-button label="歌手"/>
+          </mu-tab>
+          <mu-tab value="tab3">
+            <mu-flat-button label="批量操作"/>
+          </mu-tab>
+        </mu-tabs>
+        <!--<mu-flat-button label="历史"/>
         <mu-flat-button label="歌手"/>
-        <mu-flat-button label="批量操作"/>
+        <mu-flat-button label="批量操作"/>-->
       </mu-card-actions>
+  </mu-paper>
       <!-- 此处设置表单内容 -->
       <div class="demo-infinite-container" ref="songlistscroll">
         <mu-list class="list">
@@ -23,7 +37,7 @@
               <mu-list-item slot="left" tooltip="播放" disabled>
                 <mu-icon-button icon="play_circle_outline" v-on:click="change_song(index)"/>
               </mu-list-item>
-              <mu-list-item title="添加" slot="nested" inset>
+              <mu-list-item v-if="Change_TypeList !== 2" title="添加" slot="nested" inset>
                 <mu-avatar icon="add_circle_outline" slot="leftAvatar" v-on:click="addSong(index)"/>
               </mu-list-item>
               <mu-list-item title="下载" slot="nested" inset>
@@ -70,7 +84,9 @@
           }
         ],
         songlist_card_subtitle: '默认的副标题',
-        songlist_card_photo: '../assets/my_card_photo/my_card_1.jpg'
+        songlist_card_photo: '../assets/my_card_photo/my_card_1.jpg',
+        Show_TypeList: this.$store.state.isShow_TypeSonglist,
+        activeTab: 'tab1'
       }
     },
     created () {
@@ -88,6 +104,9 @@
         setTimeout(() => {
           this.loading = false
         }, 2000)
+      },
+      handleTabChange (val) {
+        this.activeTab = val
       },
       change_song: function (index) {
         this.$store.dispatch('changePlayerMusic', index)
@@ -108,9 +127,6 @@
             src: this.songlist[index].src
           }
         ]
-        /* console.log('进行装载的数据 = ' + needPushSong.songname)
-         console.log('进行装载的数据 = ' + needPushSong.songer) */
-        /* this.$store.commit('addSong_Name', 2, songname, songer, src) */
         this.$store.dispatch('addSong', pushSong)
       }
     },
@@ -122,13 +138,22 @@
           this.songlist = this.$store.state.lovesonglist
         }
         return this.songlist
+      },
+      Change_TypeList: function () {
+        this.Show_TypeList = this.$store.state.isShow_TypeSonglist
+        return this.Show_TypeList
       }
     }
   }
 </script>
 
 <style>
-
+  .line_style {
+    background: #7e57c2;
+  }
+  .tab_background_style {
+    background-color: #fff;
+  }
 
   .my_card_paper_style {
     position: absolute;
