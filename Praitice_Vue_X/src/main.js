@@ -112,19 +112,11 @@ const myStore = new Vuex.Store({
         state.lovesonglist.push(needPushSong[1])
       }
     },
-    addSong_Name (state, type, pushSongname, pushSonger, pushSongsrc) {
-      if (type === 1) {
-        console.log('我们没有响应第一个事件，所以不做任何处理')
-      } else if (type === 2) {
-        console.log('获取真正处理的数据  = ' + pushSongname)
-        state.lovesonglist.push({pushSongname, pushSonger, pushSongsrc})
-      }
-    },
-    deleteSong (state, type, position) {
-      if (type === 1) {
-        state.songlist.splice(position, 1)
-      } else if (type === 2) {
-        state.lovesonglist.splice(position, 1)
+    deleteSong (state, deleteSong) {
+      if (deleteSong[0].typeSonglist === 1) {
+        state.songlist.splice(deleteSong[0].position, 1)
+      } else if (deleteSong[0].typeSonglist === 2) {
+        state.lovesonglist.splice(deleteSong[0].position, 1)
       }
     }
   },
@@ -150,8 +142,8 @@ const myStore = new Vuex.Store({
     addSong ({commit}, needPushSong) {
       commit('addSong', needPushSong)
     },
-    deleteSong ({commit}, type, position) {
-      commit('deleteSong', type, position)
+    deleteSong ({commit}, deleteSong) {
+      commit('deleteSong', deleteSong)
     }
   }
 })

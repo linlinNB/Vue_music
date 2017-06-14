@@ -11,29 +11,29 @@
         <img v-bind:src="this.srclist[this.$store.state.isShow_TypeSonglist - 1].src" class="my_card_photo_style">
       </mu-card-media>
       <mu-paper>
-      <mu-card-actions>
-        <mu-tabs :value="activeTab" @change="handleTabChange" class="tab_background_style" lineClass="line_style">
-          <mu-tab value="tab1">
-            <mu-flat-button label="历史" rippleOpacity="0" color="#7e57c2"/>
-          </mu-tab>
-          <mu-tab value="tab2">
-            <mu-flat-button label="歌手"/>
-          </mu-tab>
-          <mu-tab value="tab3">
-            <mu-flat-button label="批量操作"/>
-          </mu-tab>
-        </mu-tabs>
-        <!--<mu-flat-button label="历史"/>
-        <mu-flat-button label="歌手"/>
-        <mu-flat-button label="批量操作"/>-->
-      </mu-card-actions>
-  </mu-paper>
+        <mu-card-actions>
+          <mu-tabs :value="activeTab" @change="handleTabChange" class="tab_background_style" lineClass="line_style">
+            <mu-tab value="tab1">
+              <mu-flat-button label="历史" rippleOpacity="0" color="#7e57c2"/>
+            </mu-tab>
+            <mu-tab value="tab2">
+              <mu-flat-button label="歌手"/>
+            </mu-tab>
+            <mu-tab value="tab3">
+              <mu-flat-button label="批量操作"/>
+            </mu-tab>
+          </mu-tabs>
+          <!--<mu-flat-button label="历史"/>
+          <mu-flat-button label="歌手"/>
+          <mu-flat-button label="批量操作"/>-->
+        </mu-card-actions>
+      </mu-paper>
       <!-- 此处设置表单内容 -->
       <div class="demo-infinite-container" ref="songlistscroll">
         <mu-list class="list">
           <template v-for="(item, index) in change_songlist">
             <mu-list-item v-bind:title="item.songname" v-bind:describeText="item.songer"
-                          toggleNested disabled disableRipple>
+                          toggleNested disabled disableRipple v-bind:key="item.id">
               <mu-list-item slot="left" tooltip="播放" disabled>
                 <mu-icon-button icon="play_circle_outline" v-on:click="change_song(index)"/>
               </mu-list-item>
@@ -114,7 +114,13 @@
       delete_song: function (index) {
         console.log('响应了删除事件')
         console.log('获取当前表单的位置 = ' + index)
-        this.$store.dispatch('deleteSong', this.$store.state.isShow_TypeSonglist, index)
+        let deleteSong = [
+          {
+            typeSonglist: this.$store.state.isShow_TypeSonglist,
+            position: index
+          }
+        ]
+        this.$store.dispatch('deleteSong', deleteSong)
       },
       addSong: function (index) {
         let pushSong = [
@@ -151,6 +157,7 @@
   .line_style {
     background: #7e57c2;
   }
+
   .tab_background_style {
     background-color: #fff;
   }

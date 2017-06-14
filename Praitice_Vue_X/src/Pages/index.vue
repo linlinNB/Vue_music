@@ -11,9 +11,9 @@
 
 
     <div class="index-right">
-      <slide-show v-bind:slides="slides" class="show_Slide_position"></slide-show>
-      <div>
-        <p>这是主页的右侧导航栏</p>
+      <slide-show v-bind:slides="slides"></slide-show>
+      <div class="right_card_list_position">
+        <right-card-songlist></right-card-songlist>
       </div>
     </div>
   </div>
@@ -23,11 +23,13 @@
   import slideshow from '../components/slide-show.vue'
   import leftBottomNav from '../components/left_bottom_nav.vue'
   import ListHeader from '../components/my_songlist_card.vue'
+  import rightCardSonglist from '../components/right_main_card.vue'
   export default{
     components: {
       'slide-show': slideshow,
       'left-bottom-nav': leftBottomNav,
-      'left-card-songlist': ListHeader
+      'left-card-songlist': ListHeader,
+      'right-card-songlist': rightCardSonglist
     },
     data: function () {
       return {
@@ -68,10 +70,15 @@
 </script>
 
 <style scoped>
+  .right_card_list_position {
+    position: fixed;
+    left: 26%;
+    top: 53%;
+  }
   .index-right {
     position: absolute;
     left: 450px;
-    width: 70%;
+    width: 800px;
     top: 0;
     bottom: 0;
   }
