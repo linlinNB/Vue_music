@@ -4,7 +4,7 @@
     <div class="dialog-cover" v-if="isShow === true"></div>
     <transition name="drop">
       <div class="dialog-content" v-if="isShow === true">
-        <p class="dialog-close" v-on:click="close_login_dialog">关闭</p>
+        <p class="dialog-close" v-on:click="close_login_dialog" v-on:onLogin="close_login_dialog">关闭</p>
         <slot>这里是插槽器</slot>
       </div>
     </transition>

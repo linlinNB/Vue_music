@@ -1,11 +1,22 @@
 <template>
-  <div>
-    <div class="app-head">
+  <mu-paper :zDepth="4">
+    <mu-paper :zDepth="4" class="app-head">
       <div class="app-head-inner">
-        <img class="head-logo" src="../assets/logo.png">
+        <mu-avatar src="../../static/Logo/logo.png" :size="40"/>
+        <!--<img class="head-logo" src="../assets/logo.png">-->
         <div class="head-nav">
           <ul class="nav-list">
-            <li v-if="" v-on:click="show_Login_Form">登录</li>
+
+            <li v-if="Object.keys(this.change_userInfo).length === 0"
+                v-on:click="show_Login_Form">登录
+            </li>
+            <span v-else>
+            <li>用户名：{{ this.change_userInfo.username }}</li>
+            <li class="nav-pile">|</li>
+            <li v-on:click="delete_userInfo">
+              退出
+            </li>
+            </span>
             <li class="nav-pile">|</li>
             <li v-on:click="show_Regsin_Form">注册</li>
             <li class="nav-pile">|</li>
@@ -13,7 +24,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </mu-paper>
 
     <div class="app-content">
       <!-- 此处因为对于主页经常访问，所以我们设置了缓存机制 -->
@@ -41,7 +52,7 @@
     <my-dialog v-bind:isShow="this.isShowAbout" v-on:on-close="closeDialog('isShowAbout')">
       <about-form></about-form>
     </my-dialog>
-  </div>
+  </mu-paper>
 </template>
 
 <script>
@@ -62,7 +73,14 @@
       return {
         isShowLogin: false,
         isShowReg: false,
-        isShowAbout: false
+        isShowAbout: false,
+        userInfo: {}
+      }
+    },
+    computed: {
+      change_userInfo: function () {
+        this.userInfo = this.$store.state.userInfo
+        return this.userInfo
       }
     },
     methods: {
@@ -77,6 +95,9 @@
       },
       closeDialog: function (attr) {
         this[attr] = false
+      },
+      delete_userInfo: function () {
+        this.$store.dispatch('userExit')
       }
     }
   }
@@ -175,8 +196,8 @@
   .app-head {
     background: #363636;
     color: #b2b2b2;
-    height: 90px;
-    line-height: 90px;
+    height: 50px;
+    line-height: 50px;
     width: 100%;
   }
 
@@ -272,7 +293,7 @@
 
   .app-content {
     position: absolute;
-    top: 90px;
+    top: 50px;
     bottom: 80px;
   }
 </style>

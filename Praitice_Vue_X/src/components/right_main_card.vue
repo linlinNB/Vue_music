@@ -1,21 +1,23 @@
 <template>
-  <div class="girdlist_container">
-    <!-- 此处需要进行专门的设置，要设置专门的样式 -->
-    <mu-grid-list cols="4" class="gird_style">
-      <mu-grid-tile v-for="(item, index) in this.Right_Card_songlist" v-bind:key="item.id">
-        <!-- 此处进行过设置： 展示图片 -->
-        <img v-bind:src="Right_Card_Icon[index].src"/>
-        <!--<span>{{ Right_Card_Icon[index].title }}</span>-->
-        <!-- 此处进行浮动层设置： 图片简介 -->
-        <span slot="title">{{ item.songname }}</span>
-        <!-- 此处进行浮动层设置： 歌手 -->
-        <span slot="subTitle">by <b>{{item.songer}}</b></span>
-        <!-- 此处进行浮动层设置; 图片的浮动按钮 -->
-        <span slot="action">
-          <mu-icon-button icon="star_border" v-on:click="Add_To_Songlist(index)"/>
+  <div>
+    <div class="girdlist_container">
+      <!-- 此处需要进行专门的设置，要设置专门的样式 -->
+      <mu-grid-list cols="4" class="gird_style">
+        <mu-grid-tile v-for="(item, index) in this.Right_Card_songlist" v-bind:key="item.id">
+          <!-- 此处进行过设置： 展示图片 -->
+          <img v-bind:src="Right_Card_Icon[index].src"/>
+          <!--<span>{{ Right_Card_Icon[index].title }}</span>-->
+          <!-- 此处进行浮动层设置： 图片简介 -->
+          <span slot="title">{{ item.songname }}</span>
+          <!-- 此处进行浮动层设置： 歌手 -->
+          <span slot="subTitle">by <b>{{item.songer}}</b></span>
+          <!-- 此处进行浮动层设置; 图片的浮动按钮 -->
+          <span slot="action">
+          <mu-icon-button icon="add_circle" v-on:click="Add_To_Songlist(index)"/>
         </span>
-      </mu-grid-tile>
-    </mu-grid-list>
+        </mu-grid-tile>
+      </mu-grid-list>
+    </div>
   </div>
 </template>
 

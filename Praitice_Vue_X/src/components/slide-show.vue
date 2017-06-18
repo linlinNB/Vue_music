@@ -109,10 +109,10 @@
   .slide-show {
     position: absolute;
     margin-top: 10px;
-    width: 100%;
+    width: 900px;
     height: 40%;
     overflow: hidden;
-    left: 15%;
+    left: 5%;
   }
 
   .slide-img {

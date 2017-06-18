@@ -5,11 +5,14 @@ import router from './router'
 import Vuex from 'vuex'
 import Layout from './components/layout'
 import MuseUI from 'muse-ui'
+import ElementUI from 'element-ui'
 import 'muse-ui/dist/muse-ui.css'
+import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(MuseUI)
+Vue.use(ElementUI)
 
 const myStore = new Vuex.Store({
   state: {
@@ -64,9 +67,7 @@ const myStore = new Vuex.Store({
     Change_Player_Music: false,
     Change_Pause_Play: true,
     isChange_Player_Music: false,
-    userInfo: {
-      username: ''
-    }
+    userInfo: {}
   },
   mutations: {
     showsonglistNum (state) {
@@ -118,6 +119,12 @@ const myStore = new Vuex.Store({
       } else if (deleteSong[0].typeSonglist === 2) {
         state.lovesonglist.splice(deleteSong[0].position, 1)
       }
+    },
+    userLogin (state, userInfo) {
+      state.userInfo = userInfo
+    },
+    userExit (state) {
+      state.userInfo = {}
     }
   },
   actions: {
@@ -144,6 +151,12 @@ const myStore = new Vuex.Store({
     },
     deleteSong ({commit}, deleteSong) {
       commit('deleteSong', deleteSong)
+    },
+    userLogin ({commit}, userInfo) {
+      commit('userLogin', userInfo)
+    },
+    userExit ({commit}) {
+      commit('userExit')
     }
   }
 })

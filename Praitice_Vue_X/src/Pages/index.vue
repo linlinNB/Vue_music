@@ -71,9 +71,10 @@
 
 <style scoped>
   .right_card_list_position {
-    position: fixed;
-    left: 26%;
-    top: 53%;
+    position: absolute;
+    width: 800px;
+    left: 15%;
+    top: 44%;
   }
   .index-right {
     position: absolute;

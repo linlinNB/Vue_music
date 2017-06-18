@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default{
     data: function () {
       return {
@@ -89,8 +90,32 @@
     },
     methods: {
       onLogin: function () {
+        var uname = this.username
+        var upassword = this.password
+        var Control_this = this.$store
         if (this.usernameModel.status || this.passwordModel.status) {
-          console.log('登录成功')
+          /* 进行异步传输的编写 */
+          var params = new URLSearchParams()
+          params.append('username', uname)
+          params.append('password', upassword)
+          axios.post('http://localhost:8080/TestAudio2/loginUser', params)
+            .then(function (res) {
+              console.log('获取了response对象 = ' + res.data.loginres[0].username)
+              /*Control_this.$emit('on-close')*/
+              /*console.log(Control_this)*/
+              if (res.status === 200) {
+                /*var ds = eval('(' + res.responseText + ')')*/
+                  let login_userInfo = {
+                    username: res.data.loginres[0].username,
+                    userID: res.data.loginres[0].uid
+                  }
+                  console.log('将登录信息放置前端页面  ！ ！ ！')
+                  Control_this.dispatch('userLogin',login_userInfo)
+              }
+            })
+            .catch(function (error) {
+              console.log('账户或者密码不正确 = ' + error)
+            })
         } else {
           this.errorText = '部分选项未通过'
         }

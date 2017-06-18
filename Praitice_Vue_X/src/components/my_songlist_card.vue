@@ -30,22 +30,35 @@
       </mu-paper>
       <!-- 此处设置表单内容 -->
       <div class="demo-infinite-container" ref="songlistscroll">
-        <mu-list class="list">
+        <mu-list>
           <template v-for="(item, index) in change_songlist">
             <mu-list-item v-bind:title="item.songname" v-bind:describeText="item.songer"
-                          toggleNested disabled disableRipple v-bind:key="item.id">
-              <mu-list-item slot="left" tooltip="播放" disabled>
-                <mu-icon-button icon="play_circle_outline" v-on:click="change_song(index)"/>
-              </mu-list-item>
-              <mu-list-item v-if="Change_TypeList !== 2" title="添加" slot="nested" inset>
-                <mu-avatar icon="add_circle_outline" slot="leftAvatar" v-on:click="addSong(index)"/>
-              </mu-list-item>
-              <mu-list-item title="下载" slot="nested" inset>
-                <mu-avatar icon="file_download" slot="leftAvatar"/>
-              </mu-list-item>
-              <mu-list-item title="删除" slot="nested" inset>
-                <mu-avatar icon="delete_forever" slot="leftAvatar" v-on:click="delete_song(index)"/>
-              </mu-list-item>
+                          v-bind:key="item.id">
+              <!--disabled disableRipple-->
+              <mu-icon-menu slot="right" icon="more_vert" tooltip="操作">
+                <mu-menu-item title="添加" leftIcon="add_circle_outline" v-on:click="addSong(index)"/>
+                <mu-menu-item title="下载" leftIcon="file_download"/>
+                <mu-menu-item title="删除" leftIcon="delete_forever" v-on:click="delete_song(index)"/>
+              </mu-icon-menu>
+              <mu-icon-button icon="play_circle_outline" slot="left" v-on:click="change_song(index)"/>
+            </mu-list-item>
+
+            <!--<mu-paper>
+              <mu-avatar icon="add_circle_outline" v-on:click="addSong(index)"/>
+              <mu-avatar icon="file_download"/>
+              <mu-avatar icon="delete_forever" v-on:click="delete_song(index)"/>
+            </mu-paper>-->
+
+
+            <!--<mu-list-item v-if="Change_TypeList !== 2" title="添加" slot="nested" inset>
+              <mu-avatar icon="add_circle_outline" slot="leftAvatar" v-on:click="addSong(index)"/>
+            </mu-list-item>
+            <mu-list-item title="下载" slot="nested" inset>
+              <mu-avatar icon="file_download" slot="leftAvatar"/>
+            </mu-list-item>
+            <mu-list-item title="删除" slot="nested" inset>
+              <mu-avatar icon="delete_forever" slot="leftAvatar" v-on:click="delete_song(index)"/>
+            </mu-list-item>-->
             </mu-list-item>
             <mu-divider/>
           </template>
